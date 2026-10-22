@@ -237,7 +237,7 @@ class ViperService : LifecycleService() {
                 val baseState = loadEffectStateFromPrefs(repository)
                 val json = JSONObject(saved.settingsJson)
                 deserializeEffectPrefs(json, baseState).also {
-                    repository.updateDeviceLastConnected(device.id)
+                    repository.updateDeviceConnection(device.id, device.type, device.isHeadphone)
                 }
             } else {
                 FileLogger.i("Service", "No DB entry for ${device.id}, using DataStore defaults")
@@ -249,6 +249,7 @@ class ViperService : LifecycleService() {
                         deviceName = device.name,
                         isHeadphone = device.isHeadphone,
                         settingsJson = json.toString(),
+                        deviceType = device.type,
                     ),
                 )
                 s
