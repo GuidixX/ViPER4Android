@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LibraryMusic
 import androidx.compose.material.icons.filled.PowerSettingsNew
+import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SpeakerGroup
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +34,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -56,6 +59,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.llsl.viper4android.R
 import com.llsl.viper4android.effect.EffectState
+import com.llsl.viper4android.ui.components.ConfirmDialog
 import com.llsl.viper4android.ui.components.UiDimens
 import com.llsl.viper4android.ui.screens.debug.DebugLogDialog
 import com.llsl.viper4android.ui.screens.device.DeviceDialog
@@ -91,6 +95,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val excludedApps by viewModel.excludedApps.collectAsStateWithLifecycle()
 
     var showPresetDialog by remember { mutableStateOf(false) }
+    var showResetAllConfirm by remember(state.activeDeviceId) { mutableStateOf(false) }
     var presetExportId by rememberSaveable { mutableLongStateOf(-1L) }
     var showDriverStatusDialog by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
@@ -125,6 +130,20 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                 }
             }
         }
+
+    if (showResetAllConfirm) {
+        ConfirmDialog(
+            title = stringResource(R.string.reset_all_effects_title),
+            body = stringResource(R.string.reset_all_effects_confirm, state.activeDeviceName),
+            confirmLabel = stringResource(R.string.action_reset),
+            destructive = true,
+            onConfirm = {
+                viewModel.resetAllEffects()
+                showResetAllConfirm = false
+            },
+            onDismiss = { showResetAllConfirm = false },
+        )
+    }
 
     if (showExcludedAppsDialog) {
         ExcludedAppsDialog(
@@ -412,11 +431,25 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         },
         floatingActionButtonPosition = FabPosition.End,
     ) { paddingValues ->
-        EffectList(
-            state = state,
-            viewModel = viewModel,
-            modifier = Modifier.padding(paddingValues),
-        )
+        Column(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+            OutlinedButton(
+                onClick = { showResetAllConfirm = true },
+                enabled = state.activeDeviceId.isNotEmpty(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = UiDimens.Standard, vertical = UiDimens.XSmall),
+            ) {
+                Icon(Icons.Default.RestartAlt, contentDescription = null)
+                Spacer(modifier = Modifier.width(UiDimens.Small))
+                Text(stringResource(R.string.action_reset_all_effects))
+            }
+            EffectList(
+                state = state,
+                viewModel = viewModel,
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 }
 

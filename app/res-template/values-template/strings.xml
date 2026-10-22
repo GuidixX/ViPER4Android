@@ -317,6 +317,12 @@
     <string name="action_close">Close</string>
     <string name="action_rename">Rename</string>
     <string name="action_reset">Reset</string>
+    <string name="action_reset_effect">Reset %1$s</string>
+    <string name="action_reset_all_effects">Reset entire preset</string>
+    <string name="reset_all_effects_title">Reset preset</string>
+    <string name="reset_all_effects_confirm">Reset all effects for %1$s to their default values?</string>
+    <string name="action_reset_eq_bands">Reset bands</string>
+    <string name="action_reset_coefficients">Reset coefficients</string>
     <string name="action_load">Load</string>
     <string name="action_update">Update</string>
     <string name="action_delete">Delete</string>

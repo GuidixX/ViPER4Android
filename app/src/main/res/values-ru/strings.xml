@@ -306,6 +306,12 @@
     <string name="action_close">Закрыть</string>
     <string name="action_rename">Переименовать</string>
     <string name="action_reset">Сброс</string>
+    <string name="action_reset_effect">Сбросить %1$s</string>
+    <string name="action_reset_all_effects">Сбросить весь пресет</string>
+    <string name="reset_all_effects_title">Сброс пресета</string>
+    <string name="reset_all_effects_confirm">Сбросить все эффекты для %1$s к значениям по умолчанию?</string>
+    <string name="action_reset_eq_bands">Сбросить полосы</string>
+    <string name="action_reset_coefficients">Сбросить коэффициенты</string>
     <string name="action_load">Загрузить</string>
     <string name="action_update">Обновить</string>
     <string name="action_delete">Удалить</string>
